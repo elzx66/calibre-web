@@ -1,12 +1,26 @@
 FROM linuxserver/calibre-web:latest
 
-# 设置 DOCKER_MODS 环境变量，指定要安装的 mod
-ENV DOCKER_MODS=linuxserver/mods:universal-calibre
+# 设置环境变量
+ENV DEBIAN_FRONTEND noninteractive
 
-# 构建镜像时可能会触发 mod 安装（取决于基础镜像脚本）
-RUN /docker-mods
+# 检查文件是否存在并执行安装操作
+RUN if [ -e /calibre.txz ]; then \
+        mkdir -p /app/calibre; \
+        tar xf /calibre.txz -C /app/calibre; \
+        echo "Installing Calibre version $(cat /CALIBRE_RELEASE)"; \
+        /app/calibre/calibre_postinstall; \
+        rm /calibre.txz; \
+        echo "**** The 2 warnings above about setting up completion and desktop integration are expected and harmless. You can safely ignore them. ****"; \
+    fi 
 
-ENV DOCKER_MODS=
+
+# # 设置 DOCKER_MODS 环境变量，指定要安装的 mod
+# ENV DOCKER_MODS=linuxserver/mods:universal-calibre
+
+# # 构建镜像时可能会触发 mod 安装（取决于基础镜像脚本）
+# RUN /docker-mods
+
+# ENV DOCKER_MODS=
 
 # # 更新软件包列表
 # RUN apt-get update
