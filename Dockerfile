@@ -10,11 +10,11 @@ RUN \
   echo "Downloading Calibre latest version based on ARCH" && \
   MOD_VERSION=$(curl -sX GET "https://api.github.com/repos/kovidgoyal/calibre/releases/latest" \
       | jq -r '.tag_name') && \
-  if [ "$ARCH" = "x86_64" ]; then \
+  if [ "$ARCH" == "x86_64" ]; then \
     curl -o \
         /calibre.txz -L \
         "https://download.calibre-ebook.com/${MOD_VERSION:1}/calibre-${MOD_VERSION:1}-x86_64.txz"; \
-  elif [ "$ARCH" = "aarch64" ]; then \
+  elif [ "$ARCH" == "aarch64" ]; then \
     curl -o \
         /calibre.txz -L \
         "https://download.calibre-ebook.com/${MOD_VERSION:1}/calibre-${MOD_VERSION:1}-arm64.txz"; \
