@@ -6,8 +6,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG MOD_VERSION
 ARG CLEAN_VERSION
 ARG ARCH="x86_64"
-
+# 安装 xz 工具并清理 apt-get 缓存
+RUN apt-get update && apt-get install -y xz-utils && \
+    rm -rf /var/lib/apt/lists/*
 RUN \
+  echo "installing tool packages" && \
+  apt-get update && apt-get install -y xz-utils && \
+  rm -rf /var/lib/apt/lists/* && \
   echo "Downloading Calibre latest version based on ARCH" && \
   MOD_VERSION=$(curl -sX GET "https://api.github.com/repos/kovidgoyal/calibre/releases/latest" \
       | jq -r '.tag_name') && \
